@@ -10,44 +10,28 @@ In our case, we will define the start codon to be the most commonly used ATG (in
 
 ## Instructions
 
-The objective of this coding challenge is to complete the implementation for the CodonTranslator class in the codonTranslator.cs file to translate the provided codon sequences into their corresponding proteins based on the mappings provided in the data file.  
+- The objective of this coding challenge is to complete the implementation for the CodonTranslator class in the codonTranslator.cs file to translate the provided codon sequences into their corresponding proteins based on the mappings provided in the data file.  
 
-You will be required to complete the challenge for one of the included data formats (if you have time feel free to implement one of the others for extra credit).
+- You will be required to complete the challenge for one of the included data formats (if you have time feel free to implement one of the others for extra credit).
 
-Unit test have been provided in the CodonTranslatorTester.cs file.  Running the tests should give you an indication of the completeness of your solution. 
+- Unit test have been provided in the CodonTranslatorTester.cs file.  Running the tests should give you an indication of the completeness of your solution. 
 
-## Steps
+- You will have 1 hour from the time you are given the instructions to complete the challenge.  You will need to create a pull request before the time has elapsed. 
 
-1. Clone the repo:
+- You can use any resources at your disposal to complete the challenge, books, websites, MSDN.  However, you need to complete your own work.  Do not consult with anyone else. 
 
-    `git clone https://github.com/bwkennedy/codon-test-mid.git`
+## Code
 
-2. Create your own local branch using your name:
-
-    `git checkout -b firstName_lastName`
-
-2. Commit your changes
-
-    `git commit -a -m 'your commit message'`
-
-3. Create a Pull request
-
-    `git pull-request`
+The code for this challenge can be found at https://github.com/bwkennedy/codon-test-mid. You will need to fork the project, complete the challenge, and then create a pull request. See https://gist.github.com/Chaser324/ce0505fbed06b947d962 for instructions on creating a pull request with Github.
 
 ### Included in this project
 
-1. CodonTranslator.cs - This is the code file you will need to complete
-2. CodonTranslatorTester.cs - This file includes completed unit tests for the CodonTranslator class. 
-3. Data Files - These are the data files that designate the start and stop codones, as well as the codon/protien mappings:
+1. CodonTranslator.cs - This is the code file for the CodonTranslator class you will need to complete
+2. CodonTranslatorTester.cs - This file includes completed unit tests for the CodonTranslator class
+3. Data Files - These are the data files that designate the start and stop codones, as well as the codon/protein mappings:
     - CodonTable.csv
     - CodonTable.json
     - CodonTable.xml
-
-Included in this project is a comma seperated value (CSV) text file with the codon translations.
-Each line of the file has the codon, followed by a space, then the amino acid (or start or stop)
-For example, the first line:
-CTA,L
-should be interpreted as: "the codon CTA is translated to the amino acid L"
 
 
 ### Hints
@@ -59,10 +43,13 @@ should be interpreted as: "the codon CTA is translated to the amino acid L"
 
 If the input DNA sequence is GAACAAATGCATTAATACAAAAA, the output amino acid sequence is MH.
 
-GAACAA ATG CAT TAA TACAAAAA
-        \ / \ /
-         M   H
+    GAACAA ATG CAT TAA TACAAAAA
+
+               \ / \ /
+                M   H
         
 ATG -> START -> M
+
 CAT -> H
+
 TAA -> STOP
