@@ -82,10 +82,13 @@ namespace InterviewQuestions
 
         protected abstract string CodonTableFileName { get; }
 
+
         [SetUp]
         public void Setup()
         {
-            codonTranslator = new CodonTranslator(CodonTableFileName);
+            var path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
+            path = Path.Combine(path, CodonTableFileName);
+            codonTranslator = new CodonTranslator(path.Substring(6));
         }
 
         [Test]
