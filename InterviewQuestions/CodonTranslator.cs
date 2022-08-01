@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Web.Script.Serialization;
 
 namespace InterviewQuestions
 {
@@ -37,6 +39,9 @@ namespace InterviewQuestions
 
     public class CodonTranslator
     {
+        private Dictionary<string, string> start = new Dictionary<string, string>();
+        private Dictionary<string, string> stop = new Dictionary<string, string>();
+        private Dictionary<string, string> codon = new Dictionary<string, string>();
 
         /// <summary>
         /// Constructor
@@ -51,7 +56,69 @@ namespace InterviewQuestions
 
         private void BuildTranslationMapFromFileContent(string fileContent, string fileType)
         {
-            throw new System.NotImplementedException(string.Format("The contents of the file with type \"{0}\" have been loaded, please make use of it.\n{1}",fileType,fileContent));
+            switch (fileType)
+            {
+                case ".xml":
+                    throw new System.Exception("Unimplemented file type");
+                case ".json":
+                    JsonMapping(fileContent);
+                    break;
+                case ".csv":
+                    CsvMapping(fileContent);
+                    break;
+                default:
+                    throw new System.Exception("Unknown file type");
+            }
+        }
+
+        private void JsonMapping(string fileContent)
+        {
+            Dictionary<string, object> JsonDictionary = new JavaScriptSerializer().Deserialize<Dictionary<string, object>>(fileContent);
+            foreach(KeyValuePair<string, object> kv in JsonDictionary)
+            {
+                if(kv.Key == "Starts")
+                {
+                    //foreach(object value in (KeyValuePair<string, object>) kv.Value)
+                    //{
+                    //    start.Add(value.ToString(), "M");
+                    //}
+                }
+                else if(kv.Key == "Stops")
+                {
+                    //foreach (object value in kv.Value)
+                    //{
+                    //    stop.Add(value.ToString(), "");
+                    //}
+                }
+                else
+                {
+                    //foreach (object value in kv.Value)
+                    //{
+                    //    codon.Add(value[0].Value, value[1].Value);
+                    //}
+                }
+            }
+        }
+
+        private void CsvMapping(string fileContent)
+        {
+            string[] codonList = fileContent.Replace("\n", "").Split('\r');
+            foreach (string codonMapping in codonList)
+            {
+                string[] mapping = codonMapping.Split(',');
+                if (mapping[1].ToUpper() == "START")
+                {
+                    start.Add(mapping[0], "M");
+                }
+                else if (mapping[1].ToUpper() == "STOP")
+                {
+                    stop.Add(mapping[0], "");
+                }
+                else
+                {
+                    codon.Add(mapping[0], mapping[1]);
+                }
+            }
         }
 
         /// <summary>
@@ -61,7 +128,36 @@ namespace InterviewQuestions
         /// <returns>Amino acid sequence</returns>
         public string Translate(string dna)
         {
-            return "";
+            string result = "";
+            //Keeps track of location in sequence
+            int index = 0;
+            bool startFound = false;
+            //Looks for the start of the sequence
+            for (; index < dna.Length; index++)
+            {
+                if (start.ContainsKey(dna.Substring(index, 3).ToUpper()))
+                {
+                    result += start[dna.Substring(index, 3).ToUpper()];
+                    index += 3;
+                    startFound = true;
+                    break;
+                }
+            }
+            //Makes sure there is a start to the sequence before moving on
+            if (startFound == false)
+                throw new System.Exception("Codon Not Found");
+            //Translates the rest of the codon
+            for (; index < dna.Length - 2; index += 3)
+            {
+                //Stops as soon as a stop codon is located
+                if (stop.ContainsKey(dna.Substring(index, 3).ToUpper()))
+                    return result;
+                else if (codon.ContainsKey(dna.Substring(index, 3).ToUpper()))
+                    result += codon[dna.Substring(index, 3).ToUpper()];
+                else
+                    throw new System.Exception("Codon Not Found");
+            }
+            return result;
         }
     }
 }
